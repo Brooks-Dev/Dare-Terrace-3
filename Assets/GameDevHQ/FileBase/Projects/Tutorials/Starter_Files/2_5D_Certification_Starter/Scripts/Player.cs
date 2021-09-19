@@ -5,15 +5,16 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 5f;
+    private float _speed = 9f;
     [SerializeField]
     private float _jumpHeight = 6f;
     private float _gravity = 9.8f;
     private Vector3 _playerVelocity;
-    private CharacterController _controller;
     private float _zVelocity, _yVelocity;
+    private CharacterController _controller;
     private Animator _anim;
     private bool _jumping;
+    private Vector3 _ledgePos;
     
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,16 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        CalculateMovement();
+        if (Input.GetKeyDown(KeyCode.E) && _anim.GetBool("GrabLedge"))
+        {
+            _anim.SetBool("Climb", true);
+            transform.position = new Vector3(0.5f, 70.6f, 123.2f);
+        }
+    }
+    
+    private void CalculateMovement()
     {
         if (_controller.isGrounded == true)
         {
@@ -61,5 +72,21 @@ public class Player : MonoBehaviour
         _yVelocity -= _gravity * Time.deltaTime;
         _playerVelocity = new Vector3(0f, _yVelocity, _zVelocity);
         _controller.Move(_playerVelocity * Time.deltaTime);
+    }
+    public void LedgeGrab(Vector3 ledge, Vector3 finalIdle)
+    {
+        _controller.enabled = false;
+        _anim.SetBool("GrabLedge", true);
+        _anim.SetFloat("Speed", 0.0f);
+        _anim.SetBool("Jump", false);
+        transform.position = ledge;
+        _ledgePos = finalIdle;
+    }
+
+    public void ClimbLedge()
+    {
+        transform.position = _ledgePos;
+        _anim.SetBool("GrabLedge", false); 
+        _controller.enabled = true;
     }
 }
