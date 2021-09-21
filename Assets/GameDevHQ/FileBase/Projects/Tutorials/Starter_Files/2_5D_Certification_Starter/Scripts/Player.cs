@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private float _jumpHeight = 6f;
     private float _gravity = 9.8f;
     private Vector3 _playerVelocity;
-    private float _zVelocity, _yVelocity;
+    public float _zVelocity, _yVelocity;
     private CharacterController _controller;
     private Animator _anim;
     private bool _jumping;
@@ -38,17 +38,22 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && _anim.GetBool("GrabLedge"))
         {
             _anim.SetBool("Climb", true);
-            transform.position = new Vector3(0.5f, 70.6f, 123.2f);
+            transform.Translate(new Vector3(0, 0.1f, -0.2f));
         }
+        _yVelocity -= _gravity * Time.deltaTime;
+        _anim.SetFloat("VertSpeed", _yVelocity);
+        _playerVelocity = new Vector3(0f, _yVelocity, _zVelocity);
+        _controller.Move(_playerVelocity * Time.deltaTime);
     }
     
     private void CalculateMovement()
     {
         if (_controller.isGrounded == true)
         {
-            if (_jumping == true)
+            if (_jumping == true || _anim.GetBool("Falling"))
             {
                 _jumping = false;
+                _anim.SetBool("Falling", false);
                 _anim.SetBool("Jump", _jumping);
             }
             _zVelocity = Input.GetAxis("Horizontal") * _speed;
@@ -69,9 +74,6 @@ public class Player : MonoBehaviour
                 _anim.SetBool("Jump", _jumping);
             }
         }
-        _yVelocity -= _gravity * Time.deltaTime;
-        _playerVelocity = new Vector3(0f, _yVelocity, _zVelocity);
-        _controller.Move(_playerVelocity * Time.deltaTime);
     }
     public void LedgeGrab(Vector3 ledge, Vector3 finalIdle)
     {
@@ -79,6 +81,7 @@ public class Player : MonoBehaviour
         _anim.SetBool("GrabLedge", true);
         _anim.SetFloat("Speed", 0.0f);
         _anim.SetBool("Jump", false);
+        _anim.SetBool("Falling", false);
         transform.position = ledge;
         _ledgePos = finalIdle;
     }
