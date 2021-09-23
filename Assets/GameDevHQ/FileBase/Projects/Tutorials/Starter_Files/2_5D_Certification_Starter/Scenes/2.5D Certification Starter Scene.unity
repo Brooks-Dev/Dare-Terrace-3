@@ -142,6 +142,14 @@ PrefabInstance:
       propertyPath: m_LODs.Array.data[2].screenRelativeHeight
       value: 0.04625898
       objectReference: {fileID: 0}
+    - target: {fileID: 8039906885315033138, guid: 79c98a9751de3e24e98c21e44dba89b4, type: 3}
+      propertyPath: _speed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8039906885315033138, guid: 79c98a9751de3e24e98c21e44dba89b4, type: 3}
+      propertyPath: _jumpHeight
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8039906885315033139, guid: 79c98a9751de3e24e98c21e44dba89b4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -6008,6 +6016,22 @@ PrefabInstance:
     - target: {fileID: 1769946441366271007, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087874430878894196, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: -1.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087874430878894196, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087874430878894196, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087874430878894196, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.15
       objectReference: {fileID: 0}
     - target: {fileID: 4494203752100635958, guid: 8799f195e2ca64d40986f71bb9fbd77a, type: 3}
       propertyPath: m_Name
