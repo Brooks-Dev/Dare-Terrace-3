@@ -5,7 +5,7 @@ using UnityEngine;
 public class LedgeChecker : MonoBehaviour
 {
     [SerializeField]
-    private Vector3 _ledgePos, _idlePos;
+    private GameObject _pointHanging, _pointStand;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,7 +14,7 @@ public class LedgeChecker : MonoBehaviour
             Player player = other.transform.parent.GetComponent<Player>();
             if (player != null)
             {
-                player.LedgeGrab(_ledgePos, _idlePos);
+                player.LedgeGrab(_pointHanging.transform.position, _pointStand.transform.position);
             }
         }
     }
