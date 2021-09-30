@@ -26,7 +26,6 @@ public class Lift : MonoBehaviour
     {
         if (_target == null && _nextFloor == null)
         {
-            Debug.Log("Distance " + Vector3.Distance(transform.position, _floor2.position)); 
             if (Vector3.Distance(transform.position, _floor1.position) < 0.05f)
             {
                 _goingUp = true;

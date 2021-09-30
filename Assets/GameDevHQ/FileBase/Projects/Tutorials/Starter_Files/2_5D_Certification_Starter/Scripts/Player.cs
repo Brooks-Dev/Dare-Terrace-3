@@ -24,6 +24,10 @@ public class Player : MonoBehaviour
     private bool _isFalling;
     [SerializeField]
     private bool _grabbingLedge;
+    [SerializeField]
+    private bool _onLadder, _climbingLadder;
+    private Vector3 _ladderTop, _ladderBottom;
+    private float _ladderSpeed = 2f;
     
     // Start is called before the first frame update
     void Start()
@@ -38,13 +42,46 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Animator in Player is null!");
         }
-        _distToGround = _controller.bounds.extents.y + 0.53f;
+        _distToGround = _controller.bounds.extents.y + 0.54f;
     }
 
     // Update is called once per frame
     void Update()
     {
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, _distToGround);
+        if (_onLadder == true)
+        {
+            if (_gravity > 0)
+            {
+                _gravity = 0f;
+                _anim.SetBool("Ladder", _onLadder);
+                _climbingLadder = true;
+                transform.position = _ladderBottom;
+                transform.rotation = Quaternion.LookRotation(Vector3.back);
+                Debug.Log("Bottom of ladder " + _ladderBottom);
+            }
+            _yVelocity = Input.GetAxis("Vertical") * _ladderSpeed;
+            if (Mathf.Abs(_yVelocity) > 0.1f)
+            {
+                if (_yVelocity > 0)
+                {
+                    _anim.speed = 1f;
+                    _anim.SetFloat("Movement",1f);
+                }
+                else
+                {
+                    _anim.speed = 1f;
+                    _anim.SetFloat("Movement", -1f);
+                }
+            }
+            else 
+            {
+                if (_gravity == 0)
+                {
+                    _anim.speed = 0f;
+                }
+            }
+        }
         CalculateMovement(); 
         if (Input.GetKeyDown(KeyCode.E) && _grabbingLedge == true)
         {
@@ -145,5 +182,35 @@ public class Player : MonoBehaviour
         _jumpingRunning = true;
         _anim.SetBool("Jump", _jumpingRunning);
         _yVelocity = _jumpHeight;
+    }
+
+    public void ClimbLadder(Vector3 top, Vector3 bottom)
+    {
+        _ladderTop = top;
+        _ladderBottom = bottom;
+        _anim.SetFloat("Speed", 0);
+        _onLadder = true;
+    }
+
+    public void OffLadder()
+    {
+        Debug.Log("Top position " + _ladderTop);
+        transform.position = _ladderTop;
+        transform.rotation = Quaternion.LookRotation(Vector3.back);
+        _gravity = 9.8f;
+        _climbingLadder = false;
+        _controller.enabled = true;
+    }
+
+    public void ExitLadder()
+    {
+        _onLadder = false;
+        _anim.SetBool("Ladder", _onLadder);
+        _anim.speed = 1;
+        _yVelocity = 0;
+        if (_climbingLadder == true)
+        {
+            _controller.enabled = false;
+        }
     }
 }
