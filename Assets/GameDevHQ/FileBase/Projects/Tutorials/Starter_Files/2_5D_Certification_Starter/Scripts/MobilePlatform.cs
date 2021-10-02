@@ -7,25 +7,41 @@ public class MobilePlatform : MonoBehaviour
     [SerializeField]
     private Transform _pointA, _pointB;
     private Transform _target;
-    private float _speed = 3.0f;
-    
+    private float _speed;
+    private bool _activePlatform;
+    [SerializeField]
+    private int _mobilePlatformID;
+
     // Start is called before the first frame update
     void Start()
     {
         _target = _pointA;
+        _speed = 0f;
+    }
+
+    private void Update()
+    {
+        if(GameManager.Instance.HasCards[_mobilePlatformID] == true && _activePlatform == false)
+        {
+            _activePlatform = true;
+            _speed = 3.0f;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, _pointA.position) < 0.05f)
+        if (_activePlatform == true)
         {
-            _target = _pointB;
-        }
-        else if (Vector3.Distance(transform.position, _pointB.position) < 0.05f)
-        {
-            _target = _pointA;
+            transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, _pointA.position) < 0.05f)
+            {
+                _target = _pointB;
+            }
+            else if (Vector3.Distance(transform.position, _pointB.position) < 0.05f)
+            {
+                _target = _pointA;
+            }
         }
     }
 
