@@ -31,7 +31,7 @@ public class KeyCard : MonoBehaviour
             {
                 case 0:
                     GameManager.Instance.HasCards[0] = true;
-                    Debug.Log("Yellow card");
+                    Debug.Log("Blue card");
                     if (_uiManager != null)
                     {
                         _uiManager.ToggleCard(0);
@@ -49,7 +49,7 @@ public class KeyCard : MonoBehaviour
                     break;
                 case 2:
                     GameManager.Instance.HasCards[2] = true;
-                    Debug.Log("Blue card");
+                    Debug.Log("Yellow card");
                     if (_uiManager != null)
                     {
                         _uiManager.ToggleCard(2);

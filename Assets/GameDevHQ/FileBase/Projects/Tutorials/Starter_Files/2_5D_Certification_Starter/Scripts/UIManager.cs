@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    private Toggle[] _toggle;
+    private Toggle[] _toggles;
 
     public void ToggleCard(int index)
     {
-        _toggle[index].isOn = true;
+        _toggles[index].isOn = true;
     }
 }

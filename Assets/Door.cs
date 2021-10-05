@@ -11,7 +11,7 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.HasCards[0] == true && _openDoor == false)
+        if (GameManager.Instance.HasCards[2] == true && _openDoor == false)
         {
             _openDoor = true;
         }
