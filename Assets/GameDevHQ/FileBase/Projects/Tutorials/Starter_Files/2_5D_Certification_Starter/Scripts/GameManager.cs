@@ -19,10 +19,14 @@ public class GameManager : MonoBehaviour
     }
 
     public bool[] HasCards { get; set; }
+    public bool GameOver { get; set; }
+    public bool GameRunning { get; set; }
 
     private void Awake()
     {
         _instance = this;
         HasCards = new bool[3];
+        GameRunning = false;
+        GameOver = false;
     }
 }

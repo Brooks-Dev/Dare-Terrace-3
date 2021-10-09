@@ -19,18 +19,18 @@ public class MobilePlatform : MonoBehaviour
         _speed = 0f;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if(GameManager.Instance.HasCards[_mobilePlatformID] == true && _activePlatform == false)
         {
             _activePlatform = true;
             _speed = 3.0f;
         }
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
+        else
+        {
+            _activePlatform = false;
+            _speed = 0f;
+        }
         if (_activePlatform == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
@@ -49,6 +49,7 @@ public class MobilePlatform : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("Player trigger"); 
             other.transform.parent = this.transform;
         }
     }

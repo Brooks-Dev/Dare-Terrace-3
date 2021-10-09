@@ -36,7 +36,7 @@ public class KeyCard : MonoBehaviour
                     {
                         _uiManager.ToggleCard(0);
                     }
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                     break;
                 case 1:
                     GameManager.Instance.HasCards[1] = true;
@@ -45,7 +45,7 @@ public class KeyCard : MonoBehaviour
                     {
                         _uiManager.ToggleCard(1);
                     }
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                     break;
                 case 2:
                     GameManager.Instance.HasCards[2] = true;
@@ -54,7 +54,7 @@ public class KeyCard : MonoBehaviour
                     {
                         _uiManager.ToggleCard(2);
                     }
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                     break;
                 default:
                     break;

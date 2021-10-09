@@ -7,7 +7,7 @@ public class LookAtPlayer : MonoBehaviour
     private Transform _player;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _player = GameObject.Find("Player").transform;
         if (_player == null)
@@ -19,6 +19,9 @@ public class LookAtPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Camera.main.transform.LookAt(_player);
+        if (_player != null)
+        {
+            Camera.main.transform.LookAt(_player);
+        }
     }
 }

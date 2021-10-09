@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private bool _onLadder, _climbingLadder;
     private Vector3 _ladderTop, _ladderBottom;
     private float _ladderSpeed = 2f;
+    private UIManager _uiManager;
     
     // Start is called before the first frame update
     void Start()
@@ -42,51 +43,60 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Animator in Player is null!");
         }
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+        {
+            Debug.LogError("UI Manager in player is null!");
+        }
         _distToGround = _controller.bounds.extents.y + 0.54f;
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        _isGrounded = Physics.Raycast(transform.position, Vector3.down, _distToGround);
-        if (_onLadder == true)
+        if (GameManager.Instance.GameRunning == true)
         {
-            if (_gravity > 0)
+            _isGrounded = Physics.Raycast(transform.position, Vector3.down, _distToGround);
+            if (_onLadder == true)
             {
-                _gravity = 0f;
-                _anim.SetBool("Ladder", _onLadder);
-                _climbingLadder = true;
-                transform.position = _ladderBottom;
-                transform.rotation = Quaternion.LookRotation(Vector3.back);
-                Debug.Log("Bottom of ladder " + _ladderBottom);
-            }
-            _yVelocity = Input.GetAxis("Vertical") * _ladderSpeed;
-            if (Mathf.Abs(_yVelocity) > 0.1f)
-            {
-                if (_yVelocity > 0)
+                if (_gravity > 0)
                 {
-                    _anim.speed = 1f;
-                    _anim.SetFloat("Movement",1f);
+                    _gravity = 0f;
+                    _anim.SetBool("Ladder", _onLadder);
+                    _climbingLadder = true;
+                    transform.position = _ladderBottom;
+                    transform.rotation = Quaternion.LookRotation(Vector3.back);
+                    Debug.Log("Bottom of ladder " + _ladderBottom);
+                }
+                _yVelocity = Input.GetAxis("Vertical") * _ladderSpeed;
+                if (Mathf.Abs(_yVelocity) > 0.1f)
+                {
+                    if (_yVelocity > 0)
+                    {
+                        _anim.speed = 1f;
+                        _anim.SetFloat("Movement", 1f);
+                    }
+                    else
+                    {
+                        _anim.speed = 1f;
+                        _anim.SetFloat("Movement", -1f);
+                    }
                 }
                 else
                 {
-                    _anim.speed = 1f;
-                    _anim.SetFloat("Movement", -1f);
+                    if (_gravity == 0)
+                    {
+                        _anim.speed = 0f;
+                    }
                 }
             }
-            else 
+            CalculateMovement();
+            if (Input.GetKeyDown(KeyCode.E) && _grabbingLedge == true)
             {
-                if (_gravity == 0)
-                {
-                    _anim.speed = 0f;
-                }
+                _anim.SetBool("Climb", true);
+                transform.Translate(new Vector3(0, 0.1f, -0.2f));
             }
-        }
-        CalculateMovement(); 
-        if (Input.GetKeyDown(KeyCode.E) && _grabbingLedge == true)
-        {
-            _anim.SetBool("Climb", true);
-            transform.Translate(new Vector3(0, 0.1f, -0.2f));
         }
     }
 
@@ -120,7 +130,12 @@ public class Player : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(new Vector3(0f, 0f, _zVelocity));
                 }
                 _anim.SetFloat("Speed", Mathf.Abs(_zVelocity));
-                if (_yVelocity < 0f)
+                if (_yVelocity < -20)
+                {
+                    GameManager.Instance.GameOver = true;
+                    PlayerDies();
+                }
+                else if (_yVelocity < 0)
                 {
                     _yVelocity = 0f;
                 }
@@ -139,7 +154,10 @@ public class Player : MonoBehaviour
             _yVelocity -= _gravity * Time.deltaTime;
             _anim.SetFloat("VertSpeed", _yVelocity);
             _playerVelocity = new Vector3(0f, _yVelocity, _zVelocity);
-            _controller.Move(_playerVelocity * Time.deltaTime);
+            if (GameManager.Instance.GameRunning == true)
+            {
+                _controller.Move(_playerVelocity * Time.deltaTime);
+            }
         }
     }
     public void LedgeGrab(Vector3 ledge, Vector3 finalIdle)
@@ -153,7 +171,6 @@ public class Player : MonoBehaviour
         _anim.SetBool("GrabLedge", true);
         _anim.SetFloat("Speed", 0.0f);
         _isFalling = false;
-        _anim.SetBool("Falling", false);
         transform.position = ledge;
         _ledgePos = finalIdle;
     }
@@ -212,5 +229,27 @@ public class Player : MonoBehaviour
         {
             _controller.enabled = false;
         }
+    }
+
+    public void PlayerDies()
+    {
+        GameManager.Instance.GameOver = true;
+        GameManager.Instance.GameRunning = false;
+        gameObject.SetActive(false);
+        _uiManager.GameOverUI();
+    }
+
+    public void ObjectivesCompleted()
+    {
+        GameManager.Instance.GameRunning = false;
+        gameObject.SetActive(false);
+        _uiManager.GameOverUI();
+    }
+
+    public void ActivatePlayer()
+    {
+        transform.position = new Vector3(0f, 2f, 0f);
+        _yVelocity = 0f;
+        gameObject.SetActive(true);
     }
 }

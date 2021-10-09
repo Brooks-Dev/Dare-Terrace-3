@@ -75,7 +75,6 @@ public class Lift : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Player trigger");
         if (other.CompareTag("Player"))
         {
             other.transform.parent = this.transform;

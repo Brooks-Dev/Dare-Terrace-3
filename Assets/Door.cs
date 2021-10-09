@@ -15,6 +15,10 @@ public class Door : MonoBehaviour
         {
             _openDoor = true;
         }
+        else if (GameManager.Instance.HasCards[2] == false && _openDoor == true)
+        {
+            _openDoor = false;
+        }
     }
 
     private void FixedUpdate()
@@ -22,6 +26,10 @@ public class Door : MonoBehaviour
         if (_openDoor == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, _doorOpen.position, _speed * Time.deltaTime);
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _doorClosed.position, _speed * Time.deltaTime);
         }
     }
 }

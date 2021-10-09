@@ -2602,7 +2602,7 @@ GameObject:
   - component: {fileID: 5339478797648100340}
   - component: {fileID: 5339478797648100342}
   - component: {fileID: 5339478797648100341}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mobile_Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2658,6 +2658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pointA: {fileID: 5339478797697253260}
   _pointB: {fileID: 5339478798500363407}
+  _mobilePlatformID: 0
 --- !u!1 &5339478797696450528
 GameObject:
   m_ObjectHideFlags: 0
